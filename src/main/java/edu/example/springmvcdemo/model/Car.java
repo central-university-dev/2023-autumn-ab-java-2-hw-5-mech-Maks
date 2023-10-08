@@ -12,4 +12,6 @@ public class Car {
     private LocalDate destroyed;
     private String color;
     private Model model;
+    private String firstOwner;
+    private String lastOwner;
 }
