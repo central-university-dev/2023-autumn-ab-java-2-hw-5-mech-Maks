@@ -1,6 +1,6 @@
 package edu.example.springmvcdemo.service;
 
-import edu.example.springmvcdemo.dao.CarDao;
+import edu.example.springmvcdemo.dao.CarRepository;
 import edu.example.springmvcdemo.model.Car;
 import edu.example.springmvcdemo.util.Model;
 import lombok.RequiredArgsConstructor;
@@ -11,13 +11,17 @@ import java.time.LocalDate;
 @Service
 @RequiredArgsConstructor
 public class CarService {
-    private final CarDao carDao;
-    public Car createCar(LocalDate created, LocalDate destroyed, String color, Model model) {
+    private final PersonService personService;
+    private final CarRepository carRepository;
+
+    public Car createCar(LocalDate releaseDate, String color, Model model, Long evp, Long personId) {
+        var person = personService.getPerson(personId);
         var car = new Car();
-        car.setCreated(created);
-        car.setDestroyed(destroyed);
+        car.setReleaseDate(releaseDate);
         car.setColor(color);
         car.setModel(model);
-        return carDao.save(car);
+        car.setEvp(evp);
+        car.setPerson(person);
+        return carRepository.save(car);
     }
 }

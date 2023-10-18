@@ -8,9 +8,9 @@ import java.time.LocalDate;
 @Data
 public class CreateCarResponseDto {
     private Long id;
-    private LocalDate destroyed;
+    private LocalDate releaseDate;
     private String color;
     private Model model;
-    private String firstOwner;
-    private String lastOwner;
+    private Long evp;
+    private Long personId;
 }

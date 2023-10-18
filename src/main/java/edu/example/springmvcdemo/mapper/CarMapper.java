@@ -14,9 +14,11 @@ public interface CarMapper {
     CarMapper INSTANCE = Mappers.getMapper(CarMapper.class);
 
     @Mapping(target = "id", source = "car.id")
-    @Mapping(target = "destroyed", source = "car.destroyed")
+    @Mapping(target = "releaseDate", source = "car.releaseDate")
     @Mapping(target = "color", source = "car.color", qualifiedByName = "colorMapper")
     @Mapping(target = "model", source = "car.model")
+    @Mapping(target = "evp", source = "car.evp")
+    @Mapping(target = "personId", source = "car.person.id")
     CreateCarResponseDto toCreateCarResponseDto(Car car);
 
     @Named("colorMapper")

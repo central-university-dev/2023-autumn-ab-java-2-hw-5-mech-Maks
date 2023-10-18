@@ -1,21 +1,35 @@
 package edu.example.springmvcdemo.controller;
 
+import edu.example.springmvcdemo.dto.person.PersonDto;
+import edu.example.springmvcdemo.mapper.PersonMapper;
+import edu.example.springmvcdemo.model.Person;
+import edu.example.springmvcdemo.service.PersonService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/person")
+@Tag(name = "person", description = "работа с человеком")
+@RequiredArgsConstructor
 public class PersonController {
-    @GetMapping("/hey")
-    public String heyPerson() {
-        return "heyPerson";
+    private final PersonService personService;
+    private final PersonMapper personMapper;
+
+    @GetMapping
+    @Operation(description = "Найти человека")
+    public PersonDto getPerson(Long id) {
+        var person = personService.getPerson(id);
+        return personMapper.toPersonDto(person);
     }
 
-    @GetMapping("")
-    @ResponseBody
-    public String person() {
-        return "heyPerson json";
+    @PostMapping
+    @Operation(description = "Создать человека")
+    public PersonDto createPerson(Person request) {
+        return personMapper.toPersonDto(
+                personService.createPerson(request.getName(), request.getAge())
+        );
     }
 }
