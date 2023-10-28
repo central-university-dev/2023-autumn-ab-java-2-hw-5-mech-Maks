@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="2023-10-22-create-person-jn" author="m.deryugin">
+        <addColumn tableName="person_jn">
+            <column name="active" type="boolean" remarks="Статус активности аккаунта"/>
+        </addColumn>
+
+        <sql>
+            update person_jn set active = false;
+        </sql>
+    </changeSet>
+</databaseChangeLog>

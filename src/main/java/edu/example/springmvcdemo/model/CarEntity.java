@@ -3,16 +3,14 @@ package edu.example.springmvcdemo.model;
 import edu.example.springmvcdemo.util.Model;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
 @Table(name = "car_jn")
-public class Car {
+public class CarEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "car_jn_seq")
     @SequenceGenerator(name = "car_jn_seq", sequenceName = "car_jn_seq", allocationSize = 1)
@@ -37,7 +35,14 @@ public class Car {
     /**
      * Действующий владелец машины
      */
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "person_id")
-    private Person person;
+    private PersonEntity person;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "car_showroom_id")
+    private CarShowroomEntity showroom;
+
+    @Column(name = "created_at")
+    private LocalDateTime created;
 }

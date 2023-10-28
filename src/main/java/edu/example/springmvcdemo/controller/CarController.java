@@ -1,7 +1,9 @@
 package edu.example.springmvcdemo.controller;
 
+import edu.example.springmvcdemo.dto.PageResponse;
+import edu.example.springmvcdemo.dto.car.CarFilter;
+import edu.example.springmvcdemo.dto.car.CarResponseDto;
 import edu.example.springmvcdemo.dto.car.CreateCarRequestDto;
-import edu.example.springmvcdemo.dto.car.CreateCarResponseDto;
 import edu.example.springmvcdemo.mapper.CarMapper;
 import edu.example.springmvcdemo.service.CarService;
 import edu.example.springmvcdemo.util.Model;
@@ -9,13 +11,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,7 +28,7 @@ public class CarController {
 
     @PostMapping
     @Operation(description = "Создание машины")
-    public CreateCarResponseDto create(@RequestBody @Valid CreateCarRequestDto request) {
+    public CarResponseDto create(@RequestBody @Valid CreateCarRequestDto request) {
         var car = carService.createCar(
                 LocalDate.parse(request.getReleaseDate(), formatter),
                 request.getColor(),
@@ -36,6 +37,21 @@ public class CarController {
                 request.getPersonId()
         );
 
-        return CarMapper.INSTANCE.toCreateCarResponseDto(car);
+        return CarMapper.INSTANCE.toCarResponseDto(car);
+    }
+
+    @GetMapping("/list")
+    @Operation(description = "Поиск машин по фильтру")
+    public PageResponse<CarResponseDto> findCars(@Valid CarFilter filter) {
+        var result = carService.findCars(filter.getPageNumber(), filter.getPageSize(), filter.toPredicate());
+
+        var response = new PageResponse();
+        response.setPageSize(result.getSize());
+        response.setPageNumber(result.getNumber());
+        response.setTotalPages(result.getTotalPages());
+        response.setTotalSize(result.getTotalElements());
+        response.setContent(result.getContent().stream().map(CarMapper.INSTANCE::toCarResponseDto).toList());
+
+        return response;
     }
 }

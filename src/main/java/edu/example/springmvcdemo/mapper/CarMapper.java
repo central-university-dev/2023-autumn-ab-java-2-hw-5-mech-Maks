@@ -1,13 +1,11 @@
 package edu.example.springmvcdemo.mapper;
 
-import edu.example.springmvcdemo.dto.car.CreateCarResponseDto;
-import edu.example.springmvcdemo.model.Car;
+import edu.example.springmvcdemo.dto.car.CarResponseDto;
+import edu.example.springmvcdemo.model.CarEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
-
-import java.time.LocalDateTime;
 
 @Mapper(componentModel = "spring")
 public interface CarMapper {
@@ -19,7 +17,7 @@ public interface CarMapper {
     @Mapping(target = "model", source = "car.model")
     @Mapping(target = "evp", source = "car.evp")
     @Mapping(target = "personId", source = "car.person.id")
-    CreateCarResponseDto toCreateCarResponseDto(Car car);
+    CarResponseDto toCarResponseDto(CarEntity car);
 
     @Named("colorMapper")
     static String colorMapperMethod(String color) {

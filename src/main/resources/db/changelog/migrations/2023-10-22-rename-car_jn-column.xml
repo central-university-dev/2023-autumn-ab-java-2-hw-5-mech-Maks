@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="2023-10-22-rename-car_jn-column" author="m.deryugin">
+        <renameColumn tableName="car_jn" oldColumnName="autoservice_id" newColumnName="car_showroom_id"/>
+
+        <renameTable oldTableName="autoservice_ref" newTableName="car_showroom_ref"/>
+
+        <sql>
+            CREATE SEQUENCE IF NOT EXISTS car_showroom_ref_seq start 2;
+
+            insert into person_jn (id, name, active) values (nextval('person_jn_seq'), 'keks', false);
+        </sql>
+    </changeSet>
+</databaseChangeLog>
